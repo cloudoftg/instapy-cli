@@ -2,6 +2,7 @@ import os, requests
 from instagram_private_api import MediaRatios
 from instagram_private_api_extensions import media as IGMedia
 import filetype
+import magic
 #import urlparse for Python2 and Python3
 try:
     from urllib.parse import urlparse
@@ -29,7 +30,9 @@ class Media(object):
         self.check_type()
     
     def check_type(self):
-        self.media_ext = filetype.guess(self.media_path).extension
+        #self.media_ext = filetype.guess(self.media_path).extension
+        self.media_ext = magic.from_file(self.media_path,mime=True)
+        self.media_ext=  self.media_ext.split('/')[1]
     
     def is_image(self):
         return True if self.media_ext in ['jpg', 'png', 'gif'] else False
